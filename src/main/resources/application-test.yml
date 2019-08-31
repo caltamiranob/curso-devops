@@ -1,4 +1,4 @@
-testing_datasource_url: ${ENV_FACTURACION_WEB_BD_TEST_URL:jdbc:mysql://localhost:3306/facturacion-web-integration-test?useSSL=false}
+testing_datasource_url: ${ENV_FACTURACION_WEB_BD_TEST_URL:jdbc:mysql://localhost:3306/facturacion-web?useSSL=false}
 testing_datasource_usuario: ${ENV_FACTURACION_WEB_BD_TEST_USUARIO:test}
 testing_datasource_clave: ${ENV_FACTURACION_WEB_BD_TEST_CLAVE:test}
 
