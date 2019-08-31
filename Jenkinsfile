@@ -28,7 +28,7 @@ node {
 
 	stage('Análisis Estático con Sonar') {
         
-        withSonarQubeEnv('MiSonarServer') {
+        withSonarQubeEnv('sonar-devops') {
             
             bat 'mvn -f facturacion-web/pom.xml sonar:sonar -Dsonar.projectName=facturacion-web-$BUILD-NUMBER'
             
@@ -59,7 +59,7 @@ node {
 
               "pattern": "target/*.jar", 
 
-              "target": "aplicaciones-java/facturacion-web-completo/desarrollo/${BUILD_NUMBER}/", 
+              "target": "facturacion-web/desarrollo/${BUILD_NUMBER}/", 
 
               "props": "pruebas-unitarias=si;pruebas-integracion=si;analisis-codigo-estatico=si" 
 
