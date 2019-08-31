@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="~{layout/default}">
+<head>
+</head>
+<body>
+	<div class="container" layout:fragment="content">
+
+		<h3 class="text-center">Usuarios</h3>
+		<hr />
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>NOMBRES</th>
+					<th>APELLIDOS</th>
+					<th>EMAIL</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="usuario : ${usuarios}">
+					<td th:text="${usuario.nombres}">5</td>
+					<td th:text="${usuario.apellidos}">Kubernetes</td>
+					<td th:text="${usuario.email}">Mail</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="modal fade" 
+			 id="nuevoUsuarioModal" 
+			 tabindex="-1" role="dialog" 
+			 aria-labelledby="nuevoUsuarioModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="nuevoUsuarioModalLabel">Nuevo Usuario</h4>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="txtNombres" class="control-label">NOMBRES</label>
+								<input type="text" class="form-control" id="txtNombres" />
+							</div>
+							<div class="form-group">
+								<label for="txtApellidos" class="control-label">APELLIDOS</label>
+								<input type="text" class="form-control" id="txtApellidos" />
+							</div>
+							<div class="form-group">
+								<label for="txtEmail" class="control-label">EMAIL</label>
+								<input type="text" class="form-control" id="txtEmail" />
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button id="btnCrearUsuario" type="button" class="btn btn-primary">Crear</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+	<script th:src="@{/webjars/noty/2.2.4/jquery.noty.packaged.min.js}"></script>
+
+<th:block layout:fragment="scripts">
+	<script th:inline="javascript">
+		$(document).ready(function() {
+
+			var nuevoUsuarioModal = $("#nuevoUsuarioModal");
+			var btnCrearUsuario = $("#btnCrearUsuario");
+			var txtNombres = $("#txtNombres");
+			var txtApellidos = $("#txtApellidos");
+			var txtEmail = $("#txtEmail");
+
+			function crearNuevoUsuario() {
+				var nuevoUsuario = {
+					'nombres' : txtNombres.val(),
+					'apellidos' : txtApellidos.val(),
+					'email' : txtEmail.val()
+				};
+
+				$.ajax({
+					type : "POST",
+					url : /*[[@{/usuarios/crear}]]*/,
+					data : JSON.stringify(nuevoUsuario),
+					contentType : "application/json",
+					success : function(usuario) {
+						var $tbody = $("tbody");
+						var $tr = $("<tr />");
+
+						$("<td />").text(usuario.nombres).appendTo($tr);
+						$("<td />").text(usuario.apellidos).appendTo($tr);
+						$("<td />").text(usuario.email).appendTo($tr);
+
+						$tr.appendTo($tbody);
+						nuevoUsuarioModal.modal('hide');
+						txtNombres.val("");
+						txtApellidos.val("");
+						txtEmail.val("");
+						
+				        noty({
+				            text: "Tu usuario ha sido registrada exitosamente.",
+				            layout: 'top',
+				            type: 'success',
+				            timeout: 5000
+				        });
+					},
+					error(error) {
+				        noty({
+				        	 text: error.responseJSON.message,
+				            layout: 'top',
+				            type: 'error',
+				            timeout: 5000
+				        });
+					}
+				});
+			}
+			
+			btnCrearUsuario.on("click", crearNuevoUsuario);
+			
+		})
+	</script>
+</th:block>
+
+</body>
+</html>

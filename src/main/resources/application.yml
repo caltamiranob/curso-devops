@@ -1,0 +1,26 @@
+# spring.profiles.active: dev
+server:
+  port : 9999
+  servlet:
+    contextPath: /facturacion-web
+
+spring:
+  datasource:
+    driver-class-name: "com.mysql.jdbc.Driver"
+    url: "jdbc:mysql://localhost:3306/facturacion-web?useSSL=false"
+    username: test
+    password: test
+    testWhileIdle: true
+    validationQuery: SELECT 1
+    
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  flyway:
+    enabled: true
+

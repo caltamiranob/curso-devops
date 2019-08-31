@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="~{layout/default}">
+<head>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<div class="container" layout:fragment="content">
+
+		<h3 class="text-center">Empresas</h3>
+		<hr />
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>RUC</th>
+					<th>RAZÓN SOCIAL</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="empresa : ${empresas}">
+					<td th:text="${empresa.ruc}" />
+					<td th:text="${empresa.razonSocial}" />
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="modal fade" id="nuevaEmpresaModal" tabindex="-1" role="dialog"
+			aria-labelledby="nuevaEmpresaModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="nuevaEmpresaModalLabel">Nueva Empresa</h4>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="txtRuc" class="control-label">RUC</label>
+								<input type="text" class="form-control" id="txtRuc" />
+							</div>
+							<div class="form-group">
+								<label for="txtRazonSocial" class="control-label">Razón Social</label>
+								<input type="text" class="form-control" id="txtRazonSocial" />
+							</div>
+<!-- 							<div class="form-group"> -->
+<!-- 								<label for="nuevaEmpresaRazonSocialComercial" class="control-label">RazÃ³n Social Comercial</label> -->
+<!-- 								<input type="text" class="form-control" id="txtRazonSocialComercial" /> -->
+<!-- 							</div> -->
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button id="btnCrearEmpresa" type="button" class="btn btn-primary">Crear</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+	<script th:src="@{/webjars/noty/2.2.4/jquery.noty.packaged.min.js}"></script>
+
+<th:block layout:fragment="scripts">
+	<script th:inline="javascript">
+		$(document).ready(function() {
+
+			var nuevaEmpresaModal = $("#nuevaEmpresaModal");
+			var btnCrearEmpresa = $("#btnCrearEmpresa");
+			var txtRuc = $("#txtRuc");
+			var txtRazonSocial = $("#txtRazonSocial");
+			var txtRazonSocialComercial = $("#txtRazonSocialComercial");
+
+			function crearNuevaEmpresa() {
+				var nuevaEmpresa = {
+					'ruc' : txtRuc.val(),
+					'razonSocial' : txtRazonSocial.val(),
+					'razonSocialComercial' : txtRazonSocialComercial.val()
+				};
+
+				$.ajax({
+					type : "POST",
+					url : /*[[@{/empresas/crear}]]*/,
+					data : JSON.stringify(nuevaEmpresa),
+					contentType : "application/json",
+					success : function(empresa) {
+						var $tbody = $("tbody");
+						var $tr = $("<tr />");
+
+						$("<td />").text(empresa.ruc).appendTo($tr);
+						$("<td />").text(empresa.razonSocial).appendTo($tr);
+// 						$("<td />").text(empresa.razonSocialComercial).appendTo($tr);
+
+						$tr.appendTo($tbody);
+						nuevaEmpresaModal.modal('hide');
+						txtRuc.val("");
+						txtRazonSocial.val("");
+// 						txtRazonSocialComercial.val("");
+						
+				        noty({
+				            text: "Tu empresa ha sido registrada exitosamente.",
+				            layout: 'top',
+				            type: 'success',
+				            timeout: 5000
+				        });
+					},
+					error(error) {
+				        noty({
+				            //text: "Ha ocurrido un error al registrar la empresa.",
+				            text: error.responseJSON.message,
+				            layout: 'top',
+				            type: 'error',
+				            timeout: 5000
+				        });
+					}
+				});
+			}
+			
+			btnCrearEmpresa.on("click", crearNuevaEmpresa);
+			
+		})
+	</script>
+	</th:block>
+
+</body>
+</html>

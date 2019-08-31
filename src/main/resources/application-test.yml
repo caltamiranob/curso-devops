@@ -1,0 +1,25 @@
+testing_datasource_url: ${ENV_FACTURACION_WEB_BD_TEST_URL:jdbc:mysql://localhost:3306/facturacion-web-integration-test?useSSL=false}
+testing_datasource_usuario: ${ENV_FACTURACION_WEB_BD_TEST_USUARIO:test}
+testing_datasource_clave: ${ENV_FACTURACION_WEB_BD_TEST_CLAVE:test}
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: ${testing_datasource_url}
+    username: ${testing_datasource_usuario}
+    password: ${testing_datasource_clave}
+    testWhileIdle: true
+    validationQuery: SELECT 1
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        
+  flyway:
+    enabled: true
+
+       
