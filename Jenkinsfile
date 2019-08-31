@@ -15,7 +15,7 @@ node {
 
 	stage('Pruebas Unitarias')  {
 		echo 'Ejecutando Pruebas Unitarias ....'
-		bat 'mvn facturacion-web/pom.xml test'
+		bat 'mvn -f facturacion-web/pom.xml test'
 		junit '**/target/surefire-reports/*.xml'
     }
     
@@ -42,7 +42,7 @@ node {
     
     stage('Generar Build') {
 		echo 'Generando Build ...'
-		bat 'mvn facturacion-web/pom.xml package -DskipTests=true'                       
+		bat 'mvn -f facturacion-web/pom.xml package -DskipTests=true'                       
                        
    	}
 
