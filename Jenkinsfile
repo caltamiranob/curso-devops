@@ -92,9 +92,9 @@ node {
 
 	    withEnv(['JMETER_HOME=C:\\herramientas\\apache-jmeter-4.0']) {
 
-	    	bat "C:\\herramientas\\apache-jmeter-4.0\\bin\\jmeter.bat -Jjmeter.save.saveservice.output_format=xml  -n -t src/main/resources/jmeter/plan-pruebas-facturacion-web.jmx -l src/main/resources/jmeter/plan-pruebas-facturacion-web.jtl"
+	    	bat "C:\\herramientas\\apache-jmeter-4.0\\bin\\jmeter.bat -Jjmeter.save.saveservice.output_format=xml  -n -t facturacion-web/src/main/resources/jmeter/plan-pruebas-facturacion-web.jmx -l facturacion-web/src/main/resources/jmeter/plan-pruebas-facturacion-web.jtl"
 
-	    	perfReport errorFailedThreshold: 0, errorUnstableThreshold: 0, percentiles: '0,50,90,100', relativeFailedThresholdNegative: 0.0, relativeFailedThresholdPositive: 0.0, relativeUnstableThresholdNegative: 0.0, relativeUnstableThresholdPositive: 0.0, sourceDataFiles: 'src/main/resources/jmeter/plan-pruebas-facturacion-web.jtl'                      
+	    	perfReport errorFailedThreshold: 0, errorUnstableThreshold: 0, percentiles: '0,50,90,100', relativeFailedThresholdNegative: 0.0, relativeFailedThresholdPositive: 0.0, relativeUnstableThresholdNegative: 0.0, relativeUnstableThresholdPositive: 0.0, sourceDataFiles: 'facturacion-web/src/main/resources/jmeter/plan-pruebas-facturacion-web.jtl'                      
 
 	    }
 
